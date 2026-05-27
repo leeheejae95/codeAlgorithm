@@ -2,48 +2,35 @@ package org.example.hasing.documenttheft;
 
 import java.util.*;
 
-class UserInfo implements Comparable<UserInfo> {
-    String name;
-    int time;
-
-    UserInfo(String name, int time) {
-        this.name = name;
-        this.time = time;
-    }
-
-    @Override
-    public int compareTo(UserInfo o) {
-        return this.time-o.time;
-    }
-}
-
 public class DocumentTheftPractice {
-
     public int getTime(String time) {
         int H = Integer.parseInt(time.split(":")[0]);
         int M = Integer.parseInt(time.split(":")[1]);
-        return  H*60+M;
-    }
 
+        return H*60+M;
+    }
     public String[] solution(String[] reports, String times){
 //        String[] answer = {};
-        ArrayList<UserInfo> tmp = new ArrayList<>();
-        for(String x : reports) {
-           String a = x.split(" ")[0];
-           int b = getTime(x.split(" ")[1]);
-           tmp.add(new UserInfo(a,b));
+        HashMap<String, Integer> map = new HashMap<>();
+        for(String info : reports) {
+            String name = info.split(" ")[0];
+            String time = info.split(" ")[1];
+            map.put(name,getTime(time));
         }
-        Collections.sort(tmp);
 
-        int s = getTime(times.split(" ")[0]);
-        int e = getTime(times.split(" ")[1]);
-        ArrayList<String> res = new ArrayList<>();
-        for(UserInfo u : tmp) {
-            if(u.time>=s && u.time<=e) res.add(u.name);
-            if(u.time > e) break;
+        int timeS = getTime(times.split(" ")[0]);
+        int timeE = getTime(times.split(" ")[1]);
+        ArrayList<String> list = new ArrayList<>();
+        for(String key : map.keySet()) {
+            if(map.get(key) >= timeS && map.get(key) <= timeE) {
+                list.add(key);
+            }
         }
-        String[] answer = new String[res.size()];
-        for(int i=0; i<res.size(); i++) answer[i] = res.get(i);
+        list.sort((a, b) -> map.get(a)-map.get(b));
+        String[] answer = new String[list.size()];
+        for(int i=0; i<list.size();i++) {
+            answer[i] = list.get(i);
+        }
 
         return answer;
     }

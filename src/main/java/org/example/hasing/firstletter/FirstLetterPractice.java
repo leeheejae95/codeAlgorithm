@@ -5,13 +5,15 @@ import java.util.*;
 public class FirstLetterPractice {
     public int solution(String s){
         int answer = 0;
-        int n = s.length();
         HashMap<Character, Integer> map = new HashMap<>();
-        for(char x : s.toCharArray()) map.put(x, map.getOrDefault(x,0)+1);
-        for(int i=0; i<n; i++) {
-            if(map.get(s.charAt(i)) == 1) return i+1;
-        }
 
+        for(char c : s.toCharArray()) map.put(c, map.getOrDefault(c,0)+1);
+
+        for(int i=0; i<s.length();i++) {
+            if(map.get(s.charAt(i)) == 1) {
+                return i+1;
+            }
+        }
 
         return -1;
     }

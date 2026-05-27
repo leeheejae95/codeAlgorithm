@@ -5,17 +5,21 @@ import java.util.*;
 public class FrequencyPractice {
     public int[] solution(String s){
         int[] answer = new int[5];
-        String tmp = "abcde";
+        String tmpStr = "abcde";
         HashMap<Character, Integer> map = new HashMap<>();
-        for(char x : s.toCharArray()) map.put(x, map.getOrDefault(x,0)+1);
-        int max = Integer.MIN_VALUE;
+        for(char c : s.toCharArray()) {
+            map.put(c, map.getOrDefault(c,0)+1);
+        }
+
+        int cnt = Integer.MIN_VALUE;
         for(char key : map.keySet()) {
-            if(map.get(key) > max) {
-                max = map.get(key);
+            if(cnt < map.get(key)) {
+                cnt = map.get(key);
             }
         }
-        for(int i=0; i<tmp.length(); i++) {
-            answer[i] = max - map.getOrDefault(tmp.charAt(i),0);
+
+        for(int i=0; i<tmpStr.length();i++) {
+            answer[i] = cnt - map.getOrDefault(tmpStr.charAt(i),0);
         }
 
         return answer;

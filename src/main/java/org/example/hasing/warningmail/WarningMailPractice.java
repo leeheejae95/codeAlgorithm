@@ -3,28 +3,34 @@ package org.example.hasing.warningmail;
 import java.util.*;
 
 public class WarningMailPractice {
+
     public int getTime(String time) {
         int H = Integer.parseInt(time.split(":")[0]);
         int M = Integer.parseInt(time.split(":")[1]);
-        return H * 60 + M;
+
+        return H*60+M;
     }
+
     public String[] solution(String[] reports, int time){
 //        String[] answer = {};
-        HashMap<String, Integer> inT = new HashMap<>();
-        HashMap<String, Integer> sumT = new HashMap<>();
-        for(String x : reports) {
-            String a = x.split(" ")[0];
-            int b = getTime(x.split(" ")[1]);
-            String result = x.split(" ")[2];
-            if(result.equals("in")) inT.put(a, b);
-            else sumT.put(a, sumT.getOrDefault(a, 0) + b-inT.get(a));
+        HashMap<String, Integer> inMap = new HashMap<>();
+        HashMap<String, Integer> sumMap = new HashMap<>();
+        for(String info : reports) {
+            String name = info.split(" ")[0]; // 이름
+            String timeStatus = info.split(" ")[1]; // 입퇴실 시간
+            String result = info.split(" ")[2]; // in / out 결과
+            if("in".equals(result)) inMap.put(name, getTime(timeStatus)); // in일경우 inMap에 info 넣기
+            else sumMap.put(name, sumMap.getOrDefault(name,0) + getTime(timeStatus) - inMap.get(name)); // out일 경우 나간시간에서 들어온 시간의 차이 맵에 넣기
         }
-        ArrayList<String> res = new  ArrayList<>();
-        for(String x :  sumT.keySet()) {
-            if(sumT.get(x) > time) res.add(x);
+
+        ArrayList<String> res = new ArrayList<>();
+        for(String key : sumMap.keySet()) {
+            if(sumMap.get(key) > time) res.add(key);
         }
-        Collections.sort(res);
+
+        res.sort((a,b) -> a.compareTo(b)); // 사전순으로 정렬
         String[] answer = new String[res.size()];
+
         for(int i=0;i<res.size();i++) answer[i] = res.get(i);
 
         return answer;

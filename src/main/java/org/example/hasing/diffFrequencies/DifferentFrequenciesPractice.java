@@ -7,14 +7,14 @@ public class DifferentFrequenciesPractice {
         int answer = 0;
         HashMap<Character, Integer> map = new HashMap<>();
         HashSet<Integer> set = new HashSet<>();
-        for(char x : s.toCharArray()) map.put(x, map.getOrDefault(x,0)+1);
-        for(char x : map.keySet()) {
-            while(set.contains(map.get(x))) {
+        for(char c : s.toCharArray()) map.put(c, map.getOrDefault(c,0)+1);
+        for(char key : map.keySet()) {
+            while(set.contains(map.get(key))) {
+                map.put(key,map.get(key)-1);
                 answer++;
-                map.put(x, map.get(x)-1);
             }
-            if(map.get(x) == 0) continue;
-            set.add(map.get(x));
+            if(map.get(key) == 0) continue;
+            set.add(map.get(key));
         }
 
         return answer;

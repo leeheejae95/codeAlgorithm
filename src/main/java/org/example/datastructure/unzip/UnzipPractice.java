@@ -6,31 +6,31 @@ public class UnzipPractice {
     public String solution(String s){
         String answer = "";
         Stack<String> stack = new Stack<>();
-        for(char x : s.toCharArray()) {
-            if(x == ')') {
+        for(char c : s.toCharArray()) {
+            if(c == ')') {
                 String tmp = "";
                 while(!stack.isEmpty()) {
-                    String c = stack.pop();
-                    if(c.equals("(")) {
+                    String text = stack.pop();
+                    if(text.equals("(")) {
                         String num = "";
-                        while(!stack.isEmpty() && Character.isDigit(stack.peek().charAt(0))) num = stack.pop() + num;
-                        String res = "";
+                        while(!stack.isEmpty() && Character.isDigit(stack.peek().charAt(0))) num = stack.pop()+num;
                         int cnt = 0;
                         if(num.equals("")) cnt = 1;
                         else cnt = Integer.parseInt(num);
+                        String res = "";
                         for(int i=0; i<cnt; i++) res += tmp;
                         stack.push(res);
                         break;
                     }
-                    tmp = c + tmp;
+                    tmp = text+tmp;
                 }
             } else {
-                stack.push(String.valueOf(x));
+                stack.push(String.valueOf(c));
             }
         }
-        for(String x : stack) {
-            answer += x;
-        }
+
+        for(String ans : stack) answer += ans;
+
 
         return answer;
     }

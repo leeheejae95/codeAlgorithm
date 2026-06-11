@@ -7,14 +7,14 @@ public class MaxLengthPractice {
         int answer = 0;
         HashSet<Integer> set = new HashSet<>();
         for(int x : nums) set.add(x);
-        for(int x : set) {
+        for(int num : set) {
+            if(set.contains(num-1)) continue;
             int cnt = 0;
-            if(set.contains(x-1)) continue;
-            while(set.contains(x)) {
+            while(set.contains(num)) {
                 cnt++;
-                x++;
+                num++;
             }
-            answer = Math.max(answer,cnt);
+            answer = Math.max(answer, cnt);
         }
 
         return answer;

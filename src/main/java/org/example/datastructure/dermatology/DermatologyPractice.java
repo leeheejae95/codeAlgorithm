@@ -7,34 +7,39 @@ public class DermatologyPractice {
     public int getTime(String time) {
         int H = Integer.parseInt(time.split(":")[0]);
         int M = Integer.parseInt(time.split(":")[1]);
+
         return H*60+M;
     }
 
     public int solution(int[] laser, String[] enter){
         int answer = 0;
         int n = enter.length;
-        int[][] inList = new int[n][2];
-        Queue<Integer> Q = new LinkedList<>();
-        for(int i=0; i<n; i++) {
-            int a = getTime(enter[i].split(" ")[0]); // 입장시간
-            int b = Integer.parseInt(enter[i].split(" ")[1]); // 레이저실
-            inList[i][0] = a;
-            inList[i][1] = b;
+        int[][] infoList = new int[n][2];
+        for(int i=0;i<n;i++) {
+            int arrive = getTime(enter[i].split(" ")[0]);
+            int laserType = Integer.parseInt(enter[i].split(" ")[1]);
+
+            infoList[i][0] = arrive;
+            infoList[i][1] = laserType;
         }
-        Q.offer(inList[0][1]);
-        int fT = inList[0][0];
+
+        Queue<Integer> Q = new LinkedList<>();
+        // 첫번째 손님은 기다리지 않고 시술실 들어감
+        Q.add(infoList[0][1]);
+        int fT = infoList[0][0];
         int pos = 1;
-        for(int t=fT; t<1200; t++) {
-            if(pos < n && inList[pos][0] == t) {
-                if(Q.isEmpty() && fT < inList[pos][0]) fT = inList[pos][0];
-                Q.offer(inList[pos][1]);
+        for(int time=fT; time<=1200;time++) {
+
+            if(pos<n && time==infoList[pos][0]) {
+                if(Q.isEmpty() && infoList[pos][0]>fT) fT = infoList[pos][0]; // 도착시간이 fT가 클경우 업데이트 해줘야됨
+                Q.add(infoList[pos][1]);
                 pos++;
             }
-            if(t==fT && !Q.isEmpty()) {
-                int idx = Q.poll();
-                fT += laser[idx];
+            if(!Q.isEmpty() && fT==time) {
+                int laserTypeExit = Q.poll(); // 0
+                fT += laser[laserTypeExit]; // 623 + 30 = 653
             }
-            answer = Math.max(answer, Q.size());
+            answer = Math.max(answer,Q.size());
         }
 
         return answer;

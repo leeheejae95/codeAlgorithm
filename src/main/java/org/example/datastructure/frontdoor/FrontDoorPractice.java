@@ -4,43 +4,46 @@ import java.util.*;
 
 public class FrontDoorPractice {
     public int[] solution(int[] arrival, int[] state){
-//        int[] answer = {};
         int n = arrival.length;
-        int prev = 1;
+//        int[] answer = {};
         int[] answer = new int[n];
-        Queue<Integer> enter = new LinkedList<>(); // 들어오는 사람
-        Queue<Integer> exit = new LinkedList<>(); // 나가는 사람
-        for(int t=0,i=0,cnt=0; ; t++) {
-            if(enter.isEmpty() && exit.isEmpty() && i < n) {
-                if(arrival[i] > t) {
-                    t = arrival[i];
-                    prev = 1;
-                }
+        PriorityQueue<Integer> enterQ = new PriorityQueue<>();
+        PriorityQueue<Integer> exitQ = new PriorityQueue<>();
+        int prev = 1; // 나가는 사람이 먼저
+        int time = 0;
+        int idx = 0;
+        while(idx < n ||!enterQ.isEmpty() || !exitQ.isEmpty()) {
+
+            while(idx<n && arrival[idx]==time) {
+                if(state[idx] == 0) enterQ.add(idx);
+                else exitQ.add(idx);
+                idx++;
             }
-            while(i<n && arrival[i]<=t) {
-                if(state[i] == 0) enter.offer(i);
-                else exit.offer(i);
-                i++;
+
+            if(enterQ.isEmpty() && exitQ.isEmpty()) {
+                time = arrival[idx];
+                prev = 1;
+                continue; // 시간 놓치기 방지
             }
-            if(prev == 1) {
-                if(!exit.isEmpty()) {
-                    answer[exit.poll()] = t;
-                    prev = 1;
-                } else {
-                    answer[enter.poll()] = t;
-                    prev = 0;
-                }
-            } else if(prev == 0) {
-                if(!enter.isEmpty()) {
-                    answer[enter.poll()] = t;
-                    prev = 0;
-                } else {
-                    answer[exit.poll()] = t;
-                    prev = 1;
-                }
+
+            if(!exitQ.isEmpty() && prev == 1) {
+                answer[exitQ.poll()] = time;
+                prev = 1;
+            } else if(!exitQ.isEmpty() && enterQ.isEmpty()) {
+                answer[exitQ.poll()] = time;
+                prev = 1;
+            } else if(!enterQ.isEmpty() && prev == 0) {
+                answer[enterQ.poll()] = time;
+                prev = 0;
+            } else if(!enterQ.isEmpty() && exitQ.isEmpty()) {
+                answer[enterQ.poll()] = time;
+                prev = 0;
+            } else {
+                answer[enterQ.poll()] = time;
+                prev = 0;
             }
-            cnt++;
-            if(cnt == n) break;
+
+            time++;
         }
 
         return answer;

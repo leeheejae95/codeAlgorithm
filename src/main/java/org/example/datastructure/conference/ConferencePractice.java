@@ -6,24 +6,25 @@ public class ConferencePractice {
     public int solution(int n, int[][] meetings) {
         int answer = 0;
         int[] ch = new int[n];
-        TreeSet<Integer> rooms = new TreeSet<>();
-        for(int i=0; i<n; i++) rooms.add(i);
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0]==b[0] ? a[1]-b[1] : a[0]-b[0]);
-        Arrays.sort(meetings, (a, b) -> a[0]-b[0]);
-        for(int[] m : meetings) {
-            while(!pq.isEmpty() && pq.peek()[0]<=m[0]) rooms.add(pq.poll()[1]);
-            if(!rooms.isEmpty()) {
-                int room = rooms.pollFirst();
-                ch[room]++;
-                pq.offer(new int[]{m[1], room});
-            } else {
-                int[] e = pq.poll();
-                ch[e[1]]++;
-                pq.offer(new int[]{e[0]+(m[1]-m[0]), e[1]});
+        PriorityQueue<Integer> roomPQ = new PriorityQueue<>(); // 회의실 번호
+        for(int i=0;i<n;i++) roomPQ.add(i); // 0, 1
+        PriorityQueue<int[]> conferencePQ = new PriorityQueue<>((a,b)-> a[0]==b[0] ? a[1]-b[1] : a[0]-b[0]); // 사용중인 회의실{끝나는시간, 회의실}
+        Arrays.sort(meetings, (a,b)->a[0]-b[0]); // 시작시간 기준으로 오름차순 정렬
+        for(int[] meet : meetings) { // {0,5}, {2.7}, {4,5}, {7, 10}, {9, 12}
+            while(!conferencePQ.isEmpty() && conferencePQ.peek()[0] <= meet[0]) roomPQ.add(conferencePQ.poll()[1]); // 회의실 반납
+            if(!roomPQ.isEmpty()) { // 회의실 존재
+                int roomInfo = roomPQ.poll();
+                conferencePQ.add(new int[]{meet[1], roomInfo});
+                ch[roomInfo]++;
+            } else { // 회의실이 없음
+                int[] exit = conferencePQ.poll();
+                conferencePQ.add(new int[]{exit[0]+(meet[1]-meet[0]), exit[1]});
+                ch[exit[1]]++;
             }
         }
-        int max = 0;
-        for(int i=0; i<n; i++) {
+
+        int max = Integer.MIN_VALUE;
+        for(int i=0;i<n;i++) {
             if(ch[i] > max) {
                 max = ch[i];
                 answer = i;

@@ -3,30 +3,31 @@ package org.example.datastructure.cpu;
 import java.util.*;
 
 public class CpuSchedulingPractice {
-    public int[] solution(int[][] tasks){
+    public int[] solution(int[][] tasks){ // 호출 / 실행
 //        int[] answer = {};
         int n = tasks.length;
         int[] answer = new int[n];
-        LinkedList<int[]> programs = new LinkedList<>();
-        // 작업번호 부여
-        for(int i=0; i<n; i++) {
-            programs.add(new int[]{tasks[i][0], tasks[i][1], i});
+        int[][] sorted = new int[n][3]; // {호출, 실행, 작업번호}
+        for(int i=0;i<n;i++) {
+            sorted[i][0] = tasks[i][0];
+            sorted[i][1] = tasks[i][1];
+            sorted[i][2] = i;
         }
-        programs.sort((a, b) -> a[0]-b[0]); // 도착 순으로 정렬
-        // {호출(도착)시간, 실행시간}
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0]==b[0] ? a[1]-b[1] : a[0]-b[0]);
-        int fT = 0, idx=0;
-        while(!pq.isEmpty() || !programs.isEmpty()) {
-            if(pq.isEmpty()) fT = Math.max(fT,programs.peek()[0]);
-            while(!programs.isEmpty() && programs.peek()[0]<=fT) {
-                int[] x = programs.poll();
-                pq.offer(new int[]{x[1],x[2]});
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)-> a[0]==b[0] ? a[1]-b[1] : a[0]-b[0]); // {실행시간, 작업번호}
+        Arrays.sort(sorted, (a,b)->a[0]-b[0]); // 호출순으로 정렬
+        int time = 0;
+        int cnt = 0;
+        int idx = 0;
+        while(cnt < n) {
+            if(pq.isEmpty() && time<sorted[idx][0]) time = sorted[idx][0];
+            while(idx<n && sorted[idx][0]<=time) {
+                pq.add(new int[]{sorted[idx][1], sorted[idx][2]}); // {실행, 작업번호}
+                idx++;
             }
-            int[] e = pq.poll();
-            fT += e[0];
-            answer[idx++] = e[1];
+            int[] exit = pq.poll();
+            time += exit[0]; // 실행시간 누적
+            answer[cnt++] = exit[1]; // 작업번호 넣기
         }
-
 
         return answer;
     }

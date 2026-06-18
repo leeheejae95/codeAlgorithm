@@ -3,21 +3,22 @@ package org.example.sortandthink.minconference;
 import java.util.*;
 
 public class MinConferencePractice {
-    public int solution(int[][] meetings){
+    public int solution(int[][] meetings){ //{0, 10}, {2, 5}, {5, 15}, {12, 25}
         int answer = 0;
         ArrayList<int[]> rooms = new ArrayList<>();
-        for(int[] m : meetings) {
-            rooms.add(new int[] {m[0], 1}); // 시작시간
-            rooms.add(new int[] {m[1], 2}); // 종료시간
+        for(int[] x : meetings) {
+            rooms.add(new int[]{x[0],1}); // 0,1
+            rooms.add(new int[]{x[1],2}); // 10 2
         }
-        rooms.sort((a, b) -> a[0]==b[0]?a[1]-b[1]:a[0]-b[0]);
+        rooms.sort((a, b) -> a[0]==b[0] ? b[1]-a[1] : a[0]-b[0]);
+
         int cnt = 0;
         for(int[] x : rooms) {
-            if(x[1] == 1) cnt++;
-            else cnt--;
-
-            answer = Math.max(answer, cnt);
+            if(x[1]==1) cnt++; // 회의실 사용
+            else cnt--; // 회의실 반납
+            answer = Math.max(answer,cnt);
         }
+
 
         return answer;
     }

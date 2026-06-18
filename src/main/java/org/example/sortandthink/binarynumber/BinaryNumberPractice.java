@@ -5,22 +5,23 @@ import java.util.*;
 public class BinaryNumberPractice {
 
     public int[] solution(int[] nums){
+//        int[] answer = {};
         int n = nums.length;
         int[] answer = new int[n];
-        int[][] list = new int[n][2];
-        for(int i=0; i<n; i++) {
+        int[][] sorted = new int[n][2];
+        for(int i=0;i<n;i++) {
+            int tmp = nums[i]; // 5
             int cnt = 0;
-            int tmp = nums[i];
-            while(tmp > 0) {
-                cnt += tmp % 2;
-                tmp = tmp / 2;
+            while(0 < tmp) {
+                cnt += tmp%2; // 5%2=1 / 2%2=0 / 1%2 = 1
+                tmp = tmp/2; // 5/2 = 2 / 2/2=1 / 1/2=0
             }
-            list[i][0] = nums[i];
-            list[i][1] = cnt;
+            sorted[i][0] = nums[i];
+            sorted[i][1] = cnt;
         }
-        Arrays.sort(list, (a, b) -> a[1]==b[1] ? a[0]-b[0] : a[1]-b[1]);
-        for(int i=0; i<n; i++) {
-            answer[i] = list[i][0];
+        Arrays.sort(sorted, (a,b)->a[1]==b[1] ? a[0]-b[0] : a[1]-b[1]);
+        for(int i=0; i<n;i++) {
+            answer[i] = sorted[i][0];
         }
 
         return answer;

@@ -3,21 +3,23 @@ package org.example.sortandthink.judge;
 import java.util.*;
 
 public class JudgePractice {
-    public int getAve(int[] score, int start, int end) {
+
+    public int getAvg(int[] score, int start, int end) {
         int sum = 0;
-        for(int i=start; i<=end; i++) {
+        for(int i=start;i<=end;i++) {
             sum += score[i];
         }
-        return (int) Math.floor(sum / (end-start+1));
+        return (int)Math.floor(sum/(end-start+1));
     }
+
     public int solution(int[] score, int k){
         int answer = 0;
-        int n = score.length;
+        int n = score.length; // 7
         Arrays.sort(score);
-        System.out.println(Arrays.toString(score));
-        for(int i=0; i<n-k; i++) {
+
+        for(int i=0;i<n;i++) {
             if(score[i+k-1] - score[i] <= 10) {
-                return getAve(score, i, i+k-1);
+                return getAvg(score, i, i+k-1);
             }
         }
 

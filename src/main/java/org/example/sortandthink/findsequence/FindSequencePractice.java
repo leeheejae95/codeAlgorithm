@@ -4,22 +4,22 @@ import java.util.*;
 
 public class FindSequencePractice {
     public int[] solution(int[] nums){
-        int[] answer = new int[nums.length / 2];
-        Arrays.sort(nums);
-        HashMap<Integer,Integer> map = new HashMap<>();
-        HashSet<Integer> set = new HashSet<>();
-        for(int x : nums) {
-            map.put(x,map.getOrDefault(x,0)+1);
+//        int[] answer = {};
+        int n = nums.length;
+        int[] answer = new int[n/2];
+        HashMap<Integer, Integer> map = new HashMap<>();
+        Integer[] sorted = Arrays.stream(nums).boxed().toArray(Integer[]::new);
+        Arrays.sort(sorted);
+        for(int num : sorted) {
+            map.put(num, map.getOrDefault(num,0)+1);
         }
-        // 1 2 3 5 6 10
         int idx = 0;
-        for(int x : nums) {
-            if(map.get(x) == 0) continue;
-            answer[idx++] = x;
-            map.put(x, map.get(x)-1);
-            map.put(x*2, map.get(x*2)-1);
+        for(int key : sorted) {
+            if(map.get(key) == 0) continue;
+            map.put(key*2, map.get(key*2)-1);
+            answer[idx] = key;
+            idx++;
         }
-
 
         return answer;
     }

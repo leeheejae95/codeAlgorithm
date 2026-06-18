@@ -5,24 +5,25 @@ import java.util.*;
 public class MultiTaskingPractice {
     public int solution(int[] tasks, long k) {
         int answer = 0;
-        int[] tmp = new int[tasks.length+1];
-        System.arraycopy(tasks, 0, tmp, 1, tasks.length);
-        Arrays.sort(tmp);
         int rest = tasks.length;
-        for(int i=1; i<tmp.length; i++) { // 0 2 5 7 8 9 10
-            long time = (long) rest * (tmp[i] - tmp[i-1]); // 6 * (2 - 0)
-            if(k < time) {
+        int[] tmp = new int[tasks.length+1];
+        System.arraycopy(tasks,0,tmp,1,tasks.length);
+        Arrays.sort(tmp);
+        for(int i=1;i<tmp.length;i++) {
+            long size = (long)rest*(tmp[i]-tmp[i-1]); // 살아있는 작업의 총 시간
+            if(k < size) {
                 long idx = k % rest;
                 int cnt = 0;
-                for(int j=0; j<tasks.length; j++) {
+                for(int j=0;j<tasks.length;j++) {
                     if(tasks[j] >= tmp[i]) {
-                        if(idx == cnt) return j+1;
+                        if(cnt==idx) return j+1;
                         cnt++;
                     }
                 }
+            } else {
+                k -= size;
+                rest--;
             }
-            k -= time;
-            rest--;
         }
 
         return -1;

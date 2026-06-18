@@ -5,16 +5,16 @@ import java.util.*;
 public class TakeCardPractice {
     public int solution(int[] nums, int k){
         int answer = 0;
-        int n = nums.length / 2;
-        Integer[] tmp = Arrays.stream(nums).boxed().toArray(Integer[]::new);
-        Arrays.sort(tmp, Collections.reverseOrder());
+        int n = nums.length/2;
+        Integer[] sorted = Arrays.stream(nums).boxed().toArray(Integer[]::new);
         Integer[] diff = new Integer[n];
-        for(int i=0; i<n; i++) {
-            answer += tmp[i*2+1];
-            diff[i] =  tmp[i*2] - tmp[i*2+1];
+        Arrays.sort(sorted, (a,b)->b-a); // 내림차순
+        for(int i=0;i<n;i++) {
+            answer += sorted[i*2+1]; // 현수합
+            diff[i] = sorted[i*2] - sorted[i*2+1]; // 영희와 현수 합의 차이
         }
-        Arrays.sort(diff, Collections.reverseOrder());
-        for(int i=0; i<k; i++) {
+        Arrays.sort(diff, (a,b)->b-a); // 합 차이가 높은순으로 내림차순
+        for(int i=0;i<k;i++) {
             answer += diff[i];
         }
 

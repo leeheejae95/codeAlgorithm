@@ -3,25 +3,26 @@ package org.example.dfs.badukcompetition;
 import java.util.*;
 
 public class BadukCompetitionPractice {
-    int answer,n;
+    int answer,len;
     int[] ch;
+
     public void DFS(int L, int s, int[][] cans) {
-        if(L == n/2) {
-            ArrayList<Integer> A = new  ArrayList<>();
-            ArrayList<Integer> B = new  ArrayList<>();
-            for(int i=0; i<n; i++) {
-                if(ch[i] == 1) A.add(i);
-                else B.add(i);
+        if(L == len/2) {
+            ArrayList<Integer> whiteIdx = new ArrayList<>();
+            ArrayList<Integer> blackIdx = new ArrayList<>();
+            for(int i=0;i<len;i++) {
+                if(ch[i] == 1) whiteIdx.add(i);
+                else blackIdx.add(i);
             }
-            int ASum = 0;
-            int BSum = 0;
-            for(int i=0; i<L; i++) {
-                ASum += cans[A.get(i)][0];
-                BSum += cans[B.get(i)][1];
+            int whiteSum = 0;
+            int blackSum = 0;
+            for(int i=0;i<L;i++) {
+                whiteSum += cans[whiteIdx.get(i)][0];
+                blackSum += cans[blackIdx.get(i)][1];
             }
-            answer = Math.min(answer, Math.abs(ASum-BSum));
+            answer = Math.min(answer, Math.abs(whiteSum-blackSum));
         } else {
-            for(int i=s; i<n; i++) {
+            for(int i=s;i<len;i++) {
                 if(ch[i] == 0) {
                     ch[i] = 1;
                     DFS(L+1, i+1, cans);
@@ -33,8 +34,8 @@ public class BadukCompetitionPractice {
 
     public int solution(int[][] cans) {
         answer = Integer.MAX_VALUE;
-        n =  cans.length;
-        ch = new int[n];
+        len = cans.length;
+        ch = new int[len];
         DFS(0,0,cans);
 
         return answer;

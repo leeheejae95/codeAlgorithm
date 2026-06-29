@@ -7,12 +7,13 @@ public class TugOfWarPractice {
     int[] ch;
     int[][] relation;
     Stack<Integer> stack;
+
     public void DFS(int L) {
         if(L == 7) {
             answer++;
         } else {
-            for(int i=1; i<8; i++) {
-                if(!stack.isEmpty() && relation[stack.peek()][i] == 1) continue;
+            for(int i=1;i<8;i++) {
+                if(!stack.isEmpty() && relation[stack.peek()][i]==1) continue; // stack에 마지막 학생과 그다음 학생 관계가 안좋으면 넘어가기
                 if(ch[i] == 0) {
                     ch[i] = 1;
                     stack.push(i);
@@ -28,9 +29,9 @@ public class TugOfWarPractice {
         answer = 0;
         stack = new Stack<>();
         relation = new int[8][8];
-        for(int[] x : fight) {
-            relation[x[0]][x[1]] = 1;
-            relation[x[1]][x[0]] = 1;
+        for(int[] num : fight) { // 서로 싫어하는 관계 세팅
+            relation[num[0]][num[1]] = 1;
+            relation[num[1]][num[0]] = 1;
         }
         ch = new int[8];
         DFS(0);

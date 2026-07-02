@@ -10,30 +10,29 @@ public class HomeMovePractice {
             ch[0][x] = 1;
             ch[1][x] = 1;
         }
-        Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[] {0,0}); // 0위치에서 시작
+        Queue<int[]> Q = new LinkedList<>();
+        Q.offer(new int[]{0,0}); // 현재위치, 앞으로 이동했는지 뒤로이동했는지 구분
         ch[0][0] = 1;
         ch[1][0] = 1;
         int L = 0;
-        while(!q.isEmpty()) {
-            int len = q.size();
-            for(int i=0;i<len;i++) {
-                int[] cur =  q.poll();
-                if(cur[0] == home) return L;
-                int x = cur[0] + a;
-                if(x <= 10000 && ch[0][x] == 0) { // 앞으로 이동
-                    ch[0][x] = 1;
-                    q.offer(new int[] {x,0});
+        while(!Q.isEmpty()) {
+            int size = Q.size();
+            for(int i=0;i<size;i++) {
+                int[] cur = Q.poll();
+                if(cur[0]==home) return L;
+                int nx = cur[0] + a;
+                if(nx<=10000 && ch[0][nx]==0) { // 앞으로 이동
+                    ch[0][nx] = 1;
+                    Q.offer(new int[]{nx,0});
                 }
-                x = cur[0] - b;
-                if(x >= 0 && ch[1][x]==0 && cur[1]==0) { // 뒤로 이동
-                    ch[1][x] = 1;
-                    q.offer(new int[] {x,1});
+                nx = cur[0] - b;
+                if(nx>=0 && ch[1][nx]==0 && cur[1]==0) { // 뒤로 이동하는데 웅덩이가 아니고, 뒤로이동한 적이 있으면 안됨
+                    ch[1][nx] = 1;
+                    Q.offer(new int[]{nx,1});
                 }
             }
             L++;
         }
-
 
         return -1;
     }

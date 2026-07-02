@@ -8,27 +8,27 @@ public class BuildHousePractice {
         int n = board.length;
         int[] dx = {-1,0,1,0};
         int[] dy = {0,1,0,-1};
-        int[][] cost = new  int[n][n];
-        Queue<int[]> q = new ArrayDeque<>();
+        int[][] cost = new int[n][n];
+        Queue<int[]> Q = new LinkedList<>();
         int emptyLand = 0;
-        for(int i=0; i<n; i++) {
-            for(int j=0; j<n; j++) {
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<n;j++) {
                 if(board[i][j] == 1) {
                     answer = Integer.MAX_VALUE;
-                    q.offer(new int[]{i,j});
+                    Q.offer(new int[]{i,j});
                     int L = 0;
-                    while(!q.isEmpty()) {
-                        int len = q.size();
+                    while(!Q.isEmpty()) {
                         L++;
-                        for(int r=0;r<len;r++) {
-                            int[] x = q.poll();
+                        int size = Q.size();
+                        for(int r=0;r<size;r++) {
+                            int[] x = Q.poll();
                             for(int k=0;k<4;k++) {
                                 int nx = x[0] + dx[k];
                                 int ny = x[1] + dy[k];
-                                if(nx>=0 && nx<n && ny<n && ny>=0 && board[nx][ny]==emptyLand) {
+                                if(nx>=0 && nx<n && ny>=0 && ny<n && board[nx][ny] == emptyLand) {
                                     board[nx][ny]--;
-                                    cost[nx][ny] += L;
-                                    q.offer(new int[]{nx,ny});
+                                    cost[nx][ny] += L; // 거리누적
+                                    Q.offer(new int[]{nx,ny});
                                     answer = Math.min(answer, cost[nx][ny]);
                                 }
                             }

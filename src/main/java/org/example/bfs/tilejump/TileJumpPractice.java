@@ -6,22 +6,22 @@ import java.util.*;
 public class TileJumpPractice {
     public int solution(int[] nums){
         int answer = 0;
-        int n =  nums.length;
-        int[] ch = new int[n];
-        Queue<Integer> q = new  LinkedList<>();
-        q.offer(0);
+        int len = nums.length; // 6
+        int[] ch = new int[len];
+        Queue<Integer> Q = new LinkedList<>();
+        Q.offer(0); // 시작지점
         ch[0] = 1;
         int L = 0;
-        while(!q.isEmpty()){
-            int len = q.size();
-            for(int i = 0; i < len; i++) {
-                int x = q.poll(); // 0
-                for(int j=1;j<=nums[x];j++) { // 2
-                    int nx = x+j; // 0+1 / 0+2
-                    if(nx == n-1) return L+1;
-                    if(nx<n && ch[nx] == 0) {
+        while(!Q.isEmpty()) {
+            int size = Q.size(); // 1
+            for(int i=0;i<size;i++) {
+                int x = Q.poll(); // 0
+                for(int j=1;j<=nums[x];j++) { // nums[0] = 2
+                    int nx = x + j; // 1, 2
+                    if(nx == len-1) return L+1;
+                    if(nx < len && ch[nx] == 0) {
                         ch[nx] = 1;
-                        q.offer(nx);
+                        Q.offer(nx);
                     }
                 }
             }

@@ -5,26 +5,26 @@ import java.util.*;
 public class CalfCatchPractice {
     public int solution(int s, int e){
         int answer = 0;
-        int[][] ch = new int[2][200001];
-        Queue<Integer> q = new LinkedList<>();
-        q.offer(s);
+        int[][] ch = new int[2][200001]; // 현수가 이동한 거리
         ch[0][s] = 1;
+        Queue<Integer> Q = new LinkedList<>();
+        Q.offer(s);
         int L = 0;
-        while(!q.isEmpty()) {
-            int len = q.size();
+        while(!Q.isEmpty()) {
+            int size = Q.size();
             L++;
-            for(int i = 0; i < len; i++) {
-                int x =  q.poll();
-                for(int nx : new int[]{x+1,x-1,x*2}) { // 2 0 2
-                    if(nx <= 200000 && ch[L%2][nx] == 0) {
+            for(int i=0;i<size;i++) {
+                int x = Q.poll();
+                for(int nx : new int[]{x+1, x-1, x*2}) {
+                    if(nx>=0 && nx<=200000 && ch[L%2][nx] == 0) {
                         ch[L%2][nx] = 1;
-                        q.offer(nx);
+                        Q.offer(nx);
                     }
                 }
             }
-            e += L;
-            if(e > 200000) return -1;
-            if(ch[L%2][e] == 1) return  L;
+            e = e + L;
+            if(ch[L%2][e] > 200000) return -1;
+            if(ch[L%2][e] == 1) return L;
         }
 
         return -1;

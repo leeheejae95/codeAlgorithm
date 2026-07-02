@@ -5,32 +5,32 @@ import java.util.*;
 public class KnightForestPractice {
     public int solution(int[][] board){
         int answer = Integer.MAX_VALUE;
-        int n = board.length;
-        int m = board[0].length;
+        int r = board.length;
+        int c = board[0].length;
         int[] dx = {-1,0,1,0};
         int[] dy = {0,1,0,-1};
-        int[][] dist = new int[n][m];
-        Queue<int[]> q = new ArrayDeque<>();
-        for(int i=0;i<n;i++) {
-            for(int j=0;j<m;j++) {
-                if(board[i][j] == 2 || board[i][j] == 3) {
-                    int[][] ch = new int[n][m];
-                    q.offer(new int[]{i, j});
+        int[][] cost = new int[r][c];
+        Queue<int[]> Q = new LinkedList<>();
+        for(int i=0;i<r;i++) {
+            for(int j=0;j<c;j++) {
+                if(board[i][j]==2 || board[i][j]==3) {
+                    Q.offer(new int[]{i,j});
+                    int[][] ch = new int[r][c];
                     ch[i][j] = 1;
                     int L = 0;
-                    while(!q.isEmpty()){
-                        int len =  q.size();
+                    while(!Q.isEmpty()) {
                         L++;
-                        for(int r=0;r<len;r++) {
-                            int[] x = q.poll();
+                        int size = Q.size();
+                        for(int m=0;m<size;m++) {
+                            int[] cur = Q.poll();
                             for(int k=0;k<4;k++) {
-                                int nx = x[0] + dx[k];
-                                int ny = x[1] + dy[k];
-                                if(nx >= 0 && nx < n && ny >= 0 && ny < m && board[nx][ny] != 1){
-                                    if(ch[nx][ny] == 0){
+                                int nx = cur[0] + dx[k];
+                                int ny = cur[1] + dy[k];
+                                if(nx>=0 && nx<r && ny>=0 && ny<c && board[nx][ny] != 1 && ch[nx][ny] == 0) {
+                                    if(ch[nx][ny]==0) {
                                         ch[nx][ny] = 1;
-                                        dist[nx][ny] += L;
-                                        q.offer(new int[]{nx, ny});
+                                        Q.offer(new int[]{nx,ny});
+                                        cost[nx][ny] += L;
                                     }
                                 }
                             }
@@ -40,10 +40,10 @@ public class KnightForestPractice {
             }
         }
 
-        for(int i=0; i<n;i++) {
-            for(int j=0;j<m;j++) {
-                if(board[i][j] == 4 && dist[i][j] > 0) {
-                    answer = Math.min(answer, dist[i][j]);
+        for(int i=0;i<r;i++) {
+            for(int j=0;j<c;j++) {
+                if(board[i][j]==4 && cost[i][j]>0) {
+                    answer = Math.min(answer, cost[i][j]);
                 }
             }
         }

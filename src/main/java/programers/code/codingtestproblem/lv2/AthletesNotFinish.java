@@ -1,4 +1,4 @@
-package programers.code;
+package programers.code.codingtestproblem.lv2;
 
 
 import java.util.HashMap;
